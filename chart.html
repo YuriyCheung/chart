@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Library Self-Checkout Process Flow (A4 Landscape)</title>
+<style>
+  @page {
+    size: A4 landscape;
+    margin: 5mm;
+  }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    background-color: #fff;
+  }
+
+  .page {
+    width: 287mm;   /* A4 landscape 297mm - 10mm margins */
+    height: 200mm;  /* A4 landscape 210mm - 10mm margins */
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+  }
+
+  h1 {
+    font-size: 18pt;
+    margin: 0 0 2mm 0;
+    text-align: center;
+    color: #333;
+  }
+
+  .subtitle {
+    font-size: 11pt;
+    color: #555;
+    text-align: center;
+    margin: 0 0 4mm 0;
+  }
+
+  .chart {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* Removing overflow hidden so it can scale naturally */
+  }
+
+  .chart svg {
+    max-width: 100%;
+    max-height: 100%;
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+  <h1>Library Self-Checkout Process Flow</h1>
+  <p class="subtitle">Select books → Self-checkout → Exit gate</p>
+
+  <div class="chart">
+    <pre class="mermaid">
+flowchart TD
+    A([START]) --> B["1. Reader selects one or more books"]
+    B --> C["2. Walk to self-checkout area"]
+    C --> D{"3. Self-checkout<br/>machine available?"}
+
+    D -- No --> D1["Queue for machine"]
+    D1 --> D2["Machine becomes available"]
+    D2 --> E
+
+    D -- Yes --> E["4. Select language / start transaction"]
+
+    E --> F["5. Scan library card, HKID,<br/>or account identifier"]
+    F --> G{"6. Account recognised and<br/>borrowing permitted?"}
+
+    G -- No --> G1["Seek staff assistance"]
+    G1 --> G2["Staff verifies account /<br/>explains issue"]
+    G2 --> G3{"Issue resolved<br/>immediately?"}
+    G3 -- No --> G4([Transaction ends])
+    G3 -- Yes --> F
+
+    G -- Yes --> H["7. Place books on RFID reader"]
+    H --> I{"8. System reads every<br/>item correctly?"}
+
+    I -- No --> I1["Reposition books and rescan"]
+    I1 --> I2{"Still unreadable?"}
+    I2 -- Yes --> I3["Staff assistance or<br/>manual handling"]
+    I3 --> J
+    I2 -- No --> J
+
+    I -- Yes --> J["9. System displays titles and due dates"]
+    J --> K["10. Reader confirms borrowing"]
+    K --> L["11. System updates account and<br/>deactivates item security"]
+    L --> M{"12. Receipt required?"}
+
+    M -- Yes --> M1["Print or send electronic receipt"]
+    M1 --> N
+    M -- No --> N["13. Pass through exit gate"]
+
+    N --> O{"14. Gate alarm sounds?"}
+    O -- Yes --> O1["Return to staff desk for checking"]
+    O -- No --> P([EXIT])
+
+    classDef startEnd fill:#d9ead3,stroke:#38761d,stroke-width:2px,color:#000
+    classDef step fill:#e8f0fe,stroke:#1a73e8,stroke-width:2px,color:#000
+    classDef decision fill:#fff2cc,stroke:#bf9000,stroke-width:2px,color:#000
+    classDef offpath fill:#fce5cd,stroke:#b45f06,stroke-width:2px,color:#000
+
+    class A,P startEnd
+    class B,C,E,F,H,J,K,L,N step
+    class D,G,G3,I,I2,M,O decision
+    class D1,D2,G1,G2,G4,I1,I3,M1,O1 offpath
+    </pre>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'base',
+    themeVariables: {
+      fontFamily: 'Arial, Helvetica, sans-serif',
+      fontSize: '16px',           /* INCREASED FONT SIZE */
+      primaryColor: '#ffffff',
+      primaryBorderColor: '#1a73e8',
+      lineColor: '#555'
+    },
+    flowchart: {
+      curve: 'stepBefore',
+      nodeSpacing: 35,            /* MORE SPACING */
+      rankSpacing: 40,            /* MORE SPACING */
+      padding: 12,
+      useMaxWidth: true
+    }
+  });
+</script>
+
+</body>
+</html>
